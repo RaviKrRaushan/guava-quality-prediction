@@ -22,7 +22,7 @@ It aims to assist farmers, vendors, and industries in automating fruit quality a
 ## 🔬 Methodology
 
 ### Research Design
-![Research Design](image/research_design.png)
+![Research Design](images/research_design.png)
 
 - Data collection and preprocessing (image frames of guava samples).
 - Model training on CPU and GPU with transfer learning.
@@ -38,10 +38,10 @@ It aims to assist farmers, vendors, and industries in automating fruit quality a
 - Ensemble models outperformed individual CNNs in accuracy and generalization.
 
 ### System Architecture
-![System Architecture](image/system_architecture.png)
+![System Architecture](images/system_architecture.png)
 
 ### Workflow
-![Workflow](image/workflow_diagram.png)
+![Workflow](images/workflow_diagram.png)
 
 ---
 
@@ -49,13 +49,13 @@ It aims to assist farmers, vendors, and industries in automating fruit quality a
 
 ### Validation Accuracy
 - **Models trained on CPU**  
-  ![CPU Models](image/models trained on CPU.PNG)
+  ![CPU Models](images/models trained on CPU.PNG)
 
 - **Models trained on GPU**  
-  ![GPU Models](image/models trained on GPU.PNG)
+  ![GPU Models](images/models trained on GPU.PNG)
 
 - **Ensemble Models**  
-  ![Ensemble Accuracy](image/accuracy of Ensemble Models.PNG)
+  ![Ensemble Accuracy](images/accuracy of Ensemble Models.PNG)
 
 Ensemble models achieved the **highest accuracy** compared to individual models, demonstrating the effectiveness of combining multiple CNN architectures.
 
@@ -64,22 +64,22 @@ Ensemble models achieved the **highest accuracy** compared to individual models,
 ## 🌐 Web App Screenshots
 
 - **Home Page**  
-  ![Home Page](image/Home_page.png)
+  ![Home Page](images/Home_page.png)
 
 - **About Page**  
-  ![About Page](image/about_page.png)
+  ![About Page](images/about_page.png)
 
 - **Contact Page**  
-  ![Contact Page](image/contact_page.png)
+  ![Contact Page](images/contact_page.png)
 
 - **Result Page (1)**  
-  ![Result Page 1](image/result_page_1.png)
+  ![Result Page 1](images/result_page_1.png)
 
 - **Result Page (2)**  
-  ![Result Page 2](image/result_page_2.png)
+  ![Result Page 2](images/result_page_2.png)
 
 - **Frames Analysis**  
-  ![Frames Analysis](image/frames_analysis.png)
+  ![Frames Analysis](images/frames_analysis.png)
 
 ---
 
