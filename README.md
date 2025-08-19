@@ -30,8 +30,8 @@ It aims to assist farmers, vendors, and industries in automating fruit quality a
 - Web app deployment for real-time use.
 
 ### Ensemble Learning Techniques
-![Hard Voting](image/Ensemble Model using hard voting.PNG)
-![Soft Voting](image/Ensemble Model using soft voting.PNG)
+![Hard Voting](images/Ensemble%20Model%20using%20hard%20voting.PNG)  
+![Soft Voting](images/Ensemble%20Model%20using%20soft%20voting.PNG)
 
 - **Hard Voting**: Majority class prediction.  
 - **Soft Voting**: Weighted probability-based prediction.  
@@ -49,13 +49,13 @@ It aims to assist farmers, vendors, and industries in automating fruit quality a
 
 ### Validation Accuracy
 - **Models trained on CPU**  
-  ![CPU Models](images/models trained on CPU.PNG)
+  ![CPU Models](images/models%20trained%20on%20CPU.PNG)
 
 - **Models trained on GPU**  
-  ![GPU Models](images/models trained on GPU.PNG)
+  ![GPU Models](images/models%20trained%20on%20GPU.PNG)
 
 - **Ensemble Models**  
-  ![Ensemble Accuracy](images/accuracy of Ensemble Models.PNG)
+  ![Ensemble Accuracy](images/accuracy%20of%20Ensemble%20Models.PNG)
 
 Ensemble models achieved the **highest accuracy** compared to individual models, demonstrating the effectiveness of combining multiple CNN architectures.
 
