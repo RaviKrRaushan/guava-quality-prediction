@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guava Quality Predictor</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #5ebd61, #2a7c2e);
+        }
+
+        .header {
+            background-color: #28a745;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .upload-section,
+        .camera-section,
+        .results-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-box {
+            border: 2px dashed #28a745;
+            border-radius: 5px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-box:hover {
+            background-color: #f0fff4;
+        }
+
+        .camera-container {
+            width: 100%;
+            position: relative;
+            margin-bottom: 1rem;
+            /* Added max-width and margin for better responsiveness on larger screens */
+            max-width: 640px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #video {
+            width: 100%;
+            height: auto; /* Ensure video scales correctly */
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-outline-success {
+            color: #28a745;
+            border-color: #28a745;
+        }
+
+        .result-card {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            object-fit: contain; /* Ensure images/videos fit within bounds without cropping */
+        }
+
+        .loader {
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #28a745;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .quality-badge {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
+
+        .progress {
+            height: 25px;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            color: #000;
+            font-weight: bold;
+            display: flex; /* Use flexbox for centering text */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-tabs .nav-link {
+            color: #495057;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #28a745;
+            border-color: #dee2e6 #dee2e6 #fff;
+            border-top: 3px solid #28a745;
+        }
+
+        /* Frame analysis styles */
+        .frame-thumbnail {
+            width: 100px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .frame-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        .frame-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .frame-info {
+            flex-grow: 1;
+        }
+
+        .frame-badge {
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+        }
+
+        .frames-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        #frames-summary {
+            background-color: #f0fff4;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        /* Chart.js container height */
+        #summary-pie-chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            margin: auto; /* Center the chart container */
+        }
+
+        .pie-legend {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 0 10px;
+            white-space: nowrap; /* Prevent breaking of legend items */
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        /* Modal styles for frame viewing */
+        .frame-modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        /* Video frame extraction styles (client-side simulation, largely replaced by backend) */
+        #frame-extraction-canvas {
+            display: none;
+        }
+
+        .extraction-progress {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-seedling me-2"></i>
+                Guava Quality Predictor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header text-center">
+        <h1><i class="fas fa-leaf me-2"></i>Guava Quality Predictor</h1>
+        <p class="lead">Upload an image/video or use your camera to check guava quality</p>
+    </div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="nav nav-tabs mb-4" id="predictionTab" role="tablist">
+            <button class="nav-link active" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button"
+                role="tab" aria-controls="upload" aria-selected="true">
+                <i class="fas fa-upload me-2"></i>Upload
+            </button>
+            <button class="nav-link" id="camera-tab" data-bs-toggle="tab" data-bs-target="#camera" type="button"
+                role="tab" aria-controls="camera" aria-selected="false">
+                <i class="fas fa-camera me-2"></i>Camera
+            </button>
+            <button class="nav-link" id="results-tab" data-bs-toggle="tab" data-bs-target="#results" type="button"
+                role="tab" aria-controls="results" aria-selected="false" disabled>
+                <i class="fas fa-chart-bar me-2"></i>Results
+            </button>
+        </nav>
+
+        <div class="tab-content" id="predictionTabContent">
+            <!-- Upload Section -->
+            <div class="tab-pane fade show active" id="upload" role="tabpanel" aria-labelledby="upload-tab">
+                <div class="upload-section">
+                    <h2 class="mb-4"><i class="fas fa-upload me-2"></i>Upload Image or Video</h2>
+                    <div class="upload-box" id="drop-area">
+                        <input type="file" id="fileUpload" class="d-none"
+                            accept=".jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.mkv,.webm">
+                        <div id="upload-icon">
+                            <i class="fas fa-cloud-upload-alt fa-4x text-success mb-3"></i>
+                            <h4>Drag & Drop or Click to Upload</h4>
+                            <p class="text-muted">Supported formats: JPG, PNG, GIF, MP4, AVI, MOV, MKV, WEBM</p>
+                        </div>
+                        <div id="file-preview" class="mt-3 d-none">
+                            <img id="image-preview" class="preview-image d-none">
+                            <video id="video-preview" class="preview-image d-none" controls></video>
+                            <p id="file-name" class="text-success"></p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button id="predict-upload-btn" class="btn btn-success btn-lg" disabled>
+                            <i class="fas fa-magic me-2"></i>Predict Quality
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Camera Section -->
+            <div class="tab-pane fade" id="camera" role="tabpanel" aria-labelledby="camera-tab">
+                <div class="camera-section">
+                    <h2 class="mb-4"><i class="fas fa-camera me-2"></i>Use Camera</h2>
+                    <div class="camera-container">
+                        <video id="video" autoplay playsinline></video>
+                        <canvas id="canvas"></canvas>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button id="start-camera" class="btn btn-outline-success">
+                            <i class="fas fa-video me-2"></i>Start Camera
+                        </button>
+                        <button id="take-photo" class="btn btn-success" disabled>
+                            <i class="fas fa-camera me-2"></i>Take Photo
+                        </button>
+                        <button id="start-recording" class="btn btn-outline-danger" disabled>
+                            <i class="fas fa-record-vinyl me-2"></i>Record Video
+                        </button>
+                        <button id="stop-recording" class="btn btn-danger d-none">
+                            <i class="fas fa-stop me-2"></i>Stop Recording
+                        </button>
+                    </div>
+                    <div id="camera-preview" class="mt-4 text-center d-none">
+                        <h4>Preview:</h4>
+                        <img id="captured-image" class="preview-image d-none">
+                        <video id="recorded-video" class="preview-image d-none" controls></video>
+                        <div class="text-center mt-3">
+                            <button id="predict-camera-btn" class="btn btn-success btn-lg" disabled>
+                                <i class="fas fa-magic me-2"></i>Predict Quality
+                            </button>
+                            <button id="retake-btn" class="btn btn-outline-secondary btn-lg ms-2">
+                                <i class="fas fa-redo me-2"></i>Retake
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Tab -->
+            <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="results-tab">
+                <div class="results-section">
+                    <div class="loader" id="results-loader"></div>
+                    <div id="results-content" class="d-none">
+                        <h2 class="mb-4 text-center"><i class="fas fa-chart-bar me-2"></i>Prediction Results</h2>
+
+                        <!-- Frame Extraction Progress (client-side visual feedback during video upload) -->
+                        <div id="extraction-progress" class="extraction-progress d-none">
+                            <h5>Processing video...</h5>
+                            <div class="progress">
+                                <div id="extraction-bar" class="progress-bar" role="progressbar" style="width: 0%">0%
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overall Results -->
+                        <div class="text-center mb-4">
+                            <div id="quality-badge" class="quality-badge d-inline-block"></div>
+                            <h3 id="prediction-text"></h3>
+                            <p id="confidence-text" class="text-muted"></p>
+                        </div>
+
+                        <!-- Results Navigation -->
+                        <nav class="nav nav-pills nav-fill mb-4">
+                            <button class="nav-link active" id="summary-tab" data-bs-toggle="pill"
+                                data-bs-target="#summary-view" type="button">
+                                <i class="fas fa-chart-pie me-2"></i>Summary
+                            </button>
+                            <button class="nav-link" id="frames-tab" data-bs-toggle="pill" data-bs-target="#frames-view"
+                                type="button" style="display: none;">
+                                <i class="fas fa-film me-2"></i>Frame Analysis
+                            </button>
+                        </nav>
+
+                        <div class="tab-content">
+                            <!-- Summary View -->
+                            <div class="tab-pane fade show active" id="summary-view" role="tabpanel">
+                                <div id="frames-summary" class="mb-4">
+                                    <h4 class="mb-3"><i class="fas fa-info-circle me-2"></i>Analysis Summary</h4>
+                                    <div class="row">
+                                        <div class="col-md-6 d-flex flex-column align-items-center">
+                                            <div id="summary-pie-chart-container">
+                                                <canvas id="summary-pie-chart"></canvas>
+                                            </div>
+                                            <div class="pie-legend">
+                                                <div class="legend-item">
+                                                    <span class="legend-color bg-success"></span>
+                                                    <span>Fresh</span>
+                                                </div>
+                                                <div class="legend-item">
+                                                    <span class="legend-color bg-warning"></span>
+                                                    <span>Mid</span>
+                                                </div>
+                                                <div class="legend-item">
+                                                    <span class="legend-color bg-danger"></span>
+                                                    <span>Rotten</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p id="frames-analyzed-text" class="mb-3">Frames analyzed: <span
+                                                    id="frames-count">0</span></p>
+                                            <h5>Quality Distribution:</h5>
+                                            <div class="progress mb-3">
+                                                <div id="fresh-bar" class="progress-bar bg-success" role="progressbar"
+                                                    style="width: 0%">Fresh: 0%</div>
+                                            </div>
+                                            <div class="progress mb-3">
+                                                <div id="mid-bar" class="progress-bar bg-warning" role="progressbar"
+                                                    style="width: 0%">Mid: 0%</div>
+                                            </div>
+                                            <div class="progress mb-3">
+                                                <div id="rotten-bar" class="progress-bar bg-danger" role="progressbar"
+                                                    style="width: 0%">Rotten: 0%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Frames Analysis View -->
+                            <div class="tab-pane fade" id="frames-view" role="tabpanel">
+                                <div id="frames-container" class="frames-container">
+                                    <!-- Frame analysis items will be inserted here dynamically -->
+                                </div>
+                                <div id="no-frames-message" class="text-center p-4" style="display: none;">
+                                    <p class="text-muted"><i class="fas fa-info-circle me-2"></i>Frame analysis is only
+                                        available for video uploads.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button id="analyze-another" class="btn btn-outline-success btn-lg">
+                                <i class="fas fa-redo me-2"></i>Analyze Another Guava
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame Modal -->
+    <div class="modal fade" id="frameModal" tabindex="-1" aria-labelledby="frameModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content frame-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="frameModalLabel">Frame Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modal-frame-image" src="" alt="Frame">
+                    <div class="mt-3">
+                        <h6 id="modal-frame-info"></h6>
+                        <span id="modal-frame-prediction" class="badge"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden canvas for frame extraction (no longer actively used for client-side extraction but kept) -->
+    <canvas id="frame-extraction-canvas" style="display: none;"></canvas>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About</h5>
+                    <p class="small">Guava Quality Predictor helps farmers and consumers identify the quality of guavas
+                        using AI.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="/about" class="text-white">About</a></li>
+                        <li><a href="/contact" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p class="small">Have questions? Feel free to reach out!</p>
+                    <a href="/contact" class="btn btn-outline-light btn-sm">Contact Us</a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <p class="mb-0">© 2025 Guava Quality Predictor. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+
+    <!-- Debug Status -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="debug-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+            data-bs-autohide="false">
+            <div class="toast-header bg-info text-white">
+                <strong class="me-auto">Debug Info</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="debug-info">
+                App status: Ready
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show debug toast
+            const debugToast = new bootstrap.Toast(document.getElementById('debug-toast'));
+            debugToast.show();
+            const debugInfo = document.getElementById('debug-info');
+
+            // Helper function to update debug info
+            function updateDebugInfo(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                debugInfo.innerHTML += `<br>${timestamp}: ${message}`;
+                debugInfo.scrollTop = debugInfo.scrollHeight;
+            }
+
+            updateDebugInfo('Page loaded successfully');
+
+            // Chart.js pie chart variable
+            let pieChart = null;
+
+            // Variables for tracking frame data (from backend response)
+            let frameAnalysisData = [];
+
+            // File Upload Variables
+            const fileUpload = document.getElementById('fileUpload');
+            const dropArea = document.getElementById('drop-area');
+            const filePreview = document.getElementById('file-preview');
+            const imagePreview = document.getElementById('image-preview');
+            const videoPreview = document.getElementById('video-preview');
+            const fileName = document.getElementById('file-name');
+            const uploadIcon = document.getElementById('upload-icon');
+            const predictUploadBtn = document.getElementById('predict-upload-btn');
+
+            // Camera Variables
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas'); // Not actively used for prediction submission
+            const startCameraBtn = document.getElementById('start-camera');
+            const takePhotoBtn = document.getElementById('take-photo');
+            const startRecordingBtn = document.getElementById('start-recording');
+            const stopRecordingBtn = document.getElementById('stop-recording');
+            const cameraPreview = document.getElementById('camera-preview');
+            const capturedImage = document.getElementById('captured-image');
+            const recordedVideo = document.getElementById('recorded-video');
+            const predictCameraBtn = document.getElementById('predict-camera-btn');
+            const retakeBtn = document.getElementById('retake-btn');
+
+            // Results Variables
+            const resultsTab = document.getElementById('results-tab');
+            const resultsLoader = document.getElementById('results-loader');
+            const resultsContent = document.getElementById('results-content');
+            const qualityBadge = document.getElementById('quality-badge');
+            const predictionText = document.getElementById('prediction-text');
+            const confidenceText = document.getElementById('confidence-text');
+            const freshBar = document.getElementById('fresh-bar');
+            const midBar = document.getElementById('mid-bar');
+            const rottenBar = document.getElementById('rotten-bar');
+            const framesContainer = document.getElementById('frames-container');
+            const noFramesMessage = document.getElementById('no-frames-message');
+            const framesCount = document.getElementById('frames-count');
+            const analyzeAnother = document.getElementById('analyze-another');
+
+            // Frame extraction elements (client-side visual feedback)
+            const extractionProgress = document.getElementById('extraction-progress');
+            const extractionBar = document.getElementById('extraction-bar');
+            // const frameExtractionCanvas = document.getElementById('frame-extraction-canvas'); // No longer needed for logic
+
+            // Camera Stream and Recording Variables
+            let stream;
+            let mediaRecorder;
+            let recordedChunks = [];
+            let capturedFile = null; // Stores the File/Blob object to be sent to backend
+
+            // Event Listeners for File Upload
+            dropArea.addEventListener('click', () => {
+                fileUpload.click();
+            });
+
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#28a745';
+                dropArea.style.backgroundColor = '#f0fff4';
+            });
+
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.style.borderColor = '#28a745';
+                dropArea.style.backgroundColor = 'white';
+            });
+
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.style.borderColor = '#28a745';
+                dropArea.style.backgroundColor = 'white';
+                if (e.dataTransfer.files.length) {
+                    handleFileSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileUpload.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            // Function to handle file selection (from upload or drag/drop)
+            function handleFileSelect(file) {
+                updateDebugInfo(`File selected: ${file.name} (${file.type})`);
+
+                // Reset camera preview
+                cameraPreview.classList.add('d-none');
+                capturedImage.classList.add('d-none');
+                recordedVideo.classList.add('d-none');
+
+                // Reset previews for upload section
+                imagePreview.classList.add('d-none');
+                videoPreview.classList.add('d-none');
+                videoPreview.pause(); // Pause video if playing
+                videoPreview.removeAttribute('src'); // Clear video src
+
+                // Check if file is valid and display preview
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                const validVideoTypes = ['video/mp4', 'video/avi', 'video/quicktime', 'video/x-matroska', 'video/webm'];
+
+                if (validImageTypes.includes(file.type)) {
+                    updateDebugInfo('Displaying image file preview.');
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                } else if (validVideoTypes.includes(file.type)) {
+                    updateDebugInfo('Displaying video file preview.');
+                    const url = URL.createObjectURL(file);
+                    videoPreview.src = url;
+                    videoPreview.load(); // Load the video to ensure metadata is available
+                    videoPreview.classList.remove('d-none');
+                } else {
+                    updateDebugInfo(`Error: Unsupported file type: ${file.type}`);
+                    alert('Unsupported file type. Please upload an image or video (JPG, PNG, GIF, MP4, AVI, MOV, MKV, WEBM).');
+                    predictUploadBtn.disabled = true;
+                    return;
+                }
+
+                // Show preview area and enable button
+                uploadIcon.classList.add('d-none');
+                filePreview.classList.remove('d-none');
+                fileName.textContent = file.name;
+                predictUploadBtn.disabled = false;
+
+                // Store the file for later submission
+                capturedFile = file;
+                updateDebugInfo('File ready for prediction via upload.');
+            }
+
+            // Camera Functions
+            startCameraBtn.addEventListener('click', async () => {
+                updateDebugInfo('Attempting to start camera...');
+                try {
+                    // Stop any existing stream
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+
+                    // Try different constraint combinations for better compatibility
+                    let constraints = {
+                        video: {
+                            width: { ideal: 1280, max: 1920 },
+                            height: { ideal: 720, max: 1080 },
+                            facingMode: 'environment' // Prefer rear camera on mobile
+                        }
+                    };
+
+                    try {
+                        stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    } catch (err) {
+                        console.warn('Advanced camera constraints failed, trying basic:', err);
+                        constraints = { video: true }; // Fallback to basic constraints
+                        stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    }
+
+                    video.srcObject = stream;
+
+                    // Wait for video to be ready and play
+                    video.onloadedmetadata = () => {
+                        video.play().then(() => {
+                            updateDebugInfo('Camera started successfully.');
+                            startCameraBtn.disabled = true;
+                            takePhotoBtn.disabled = false;
+                            startRecordingBtn.disabled = false;
+                            predictCameraBtn.disabled = true; // Disable predict until photo/video is taken
+                            cameraPreview.classList.add('d-none'); // Hide any old preview
+                        }).catch(err => {
+                            console.error('Error playing video stream:', err);
+                            alert('Error playing camera feed. Please try again.');
+                            updateDebugInfo('Error playing video stream: ' + err.message);
+                        });
+                    };
+
+                } catch (err) {
+                    console.error('Error accessing camera:', err);
+                    let errorMessage = 'Error accessing camera. ';
+
+                    if (err.name === 'NotAllowedError') {
+                        errorMessage += 'Please allow camera permission for this site.';
+                    } else if (err.name === 'NotFoundError') {
+                        errorMessage += 'No camera found on this device.';
+                    } else if (err.name === 'NotSupportedError') {
+                        errorMessage += 'Camera not supported in this browser or device.';
+                    } else if (err.name === 'AbortError' || err.name === 'SecurityError') {
+                        errorMessage += 'Camera access was denied or restricted.';
+                    } else {
+                        errorMessage += 'Please check your camera and try again.';
+                    }
+                    alert(errorMessage);
+                    updateDebugInfo('Failed to start camera: ' + errorMessage);
+                }
+            });
+
+            takePhotoBtn.addEventListener('click', () => {
+                updateDebugInfo('Attempting to take photo...');
+                if (!video.videoWidth || !video.videoHeight) {
+                    alert('Camera feed not ready yet. Please wait a moment after clicking "Start Camera".');
+                    updateDebugInfo('Cannot take photo: Video dimensions not available.');
+                    return;
+                }
+
+                // Set canvas dimensions to match video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Draw the current video frame to the canvas
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Convert canvas to Blob (File-like object) and then to DataURL for preview
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        alert('Failed to capture image. Please try again.');
+                        updateDebugInfo('Failed to create Blob from canvas.');
+                        return;
+                    }
+
+                    // Create a File object from the blob for consistent handling
+                    capturedFile = new File([blob], `guava-photo-${Date.now()}.jpeg`, { type: 'image/jpeg', lastModified: Date.now() });
+                    updateDebugInfo(`Photo captured, file created: ${capturedFile.name} (${capturedFile.size} bytes)`);
+
+                    // Show preview
+                    capturedImage.src = URL.createObjectURL(blob); // Use URL.createObjectURL for immediate display
+                    capturedImage.classList.remove('d-none');
+                    recordedVideo.classList.add('d-none'); // Hide video preview
+                    cameraPreview.classList.remove('d-none'); // Show camera preview section
+
+                    predictCameraBtn.disabled = false; // Enable predict button
+                    updateDebugInfo('Photo captured and preview displayed.');
+                }, 'image/jpeg', 0.95); // Quality 95%
+            });
+
+            startRecordingBtn.addEventListener('click', async () => {
+                updateDebugInfo('Attempting to start video recording...');
+                if (!stream) {
+                    alert('Camera not started. Please click "Start Camera" first.');
+                    return;
+                }
+                
+                recordedChunks = [];
+                let options = { mimeType: 'video/webm;codecs=vp8' }; // Default to vp8 for broader compatibility
+
+                // Try vp9 first for better quality/compression if supported
+                if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                    options = { mimeType: 'video/webm;codecs=vp9' };
+                } else if (MediaRecorder.isTypeSupported('video/webm;codecs=h264')) {
+                    options = { mimeType: 'video/webm;codecs=h264' }; // Fallback to h264 if webm/vp9 not supported
+                } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+                    options = { mimeType: 'video/mp4' }; // Fallback to mp4
+                }
+
+
+                try {
+                    mediaRecorder = new MediaRecorder(stream, options);
+                } catch (e) {
+                    console.error('MediaRecorder initialization error:', e);
+                    alert('Recording not supported in this browser or with current camera settings. Try using Chrome or Firefox, or check camera permissions.');
+                    updateDebugInfo('MediaRecorder init error: ' + e.message);
+                    return;
+                }
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    updateDebugInfo('Recording stopped. Processing recorded video...');
+                    const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType });
+                    capturedFile = new File([blob], `guava-video-${Date.now()}.webm`, { type: mediaRecorder.mimeType, lastModified: Date.now() });
+                    updateDebugInfo(`Video recorded, file created: ${capturedFile.name} (${capturedFile.size} bytes)`);
+
+                    const videoURL = URL.createObjectURL(blob);
+                    recordedVideo.src = videoURL;
+                    recordedVideo.classList.remove('d-none');
+                    capturedImage.classList.add('d-none'); // Hide image preview
+                    cameraPreview.classList.remove('d-none'); // Show camera preview section
+
+                    predictCameraBtn.disabled = false; // Enable predict button
+                    updateDebugInfo('Recorded video preview displayed.');
+                };
+
+                mediaRecorder.onerror = (event) => {
+                    console.error('MediaRecorder error:', event.error);
+                    alert('An error occurred during recording: ' + event.error.name + '. Please try again.');
+                    updateDebugInfo('MediaRecorder error: ' + event.error.name);
+                    stopRecordingBtn.classList.add('d-none');
+                    startRecordingBtn.classList.remove('d-none');
+                    takePhotoBtn.disabled = false;
+                    predictCameraBtn.disabled = true;
+                };
+
+                // Start recording
+                mediaRecorder.start(100); // Collect data every 100ms for smoother recording
+
+                // Update UI
+                startRecordingBtn.classList.add('d-none');
+                stopRecordingBtn.classList.remove('d-none');
+                takePhotoBtn.disabled = true; // Disable photo button during recording
+                predictCameraBtn.disabled = true; // Disable predict button until recording is stopped
+                updateDebugInfo('Video recording started.');
+            });
+
+            stopRecordingBtn.addEventListener('click', () => {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                    updateDebugInfo('Video recording stopping...');
+                }
+
+                // Update UI
+                stopRecordingBtn.classList.add('d-none');
+                startRecordingBtn.classList.remove('d-none');
+                takePhotoBtn.disabled = false; // Re-enable photo button
+            });
+
+            retakeBtn.addEventListener('click', () => {
+                updateDebugInfo('Retake button clicked. Resetting camera preview and captured file.');
+                // Hide preview and reset camera
+                cameraPreview.classList.add('d-none');
+                capturedImage.classList.add('d-none');
+                capturedImage.removeAttribute('src'); // Clear image src
+                recordedVideo.classList.add('d-none');
+                recordedVideo.removeAttribute('src'); // Clear video src
+                recordedVideo.pause();
+
+                // If video is playing, keep it playing for new capture
+                if (stream && video.srcObject) {
+                    video.srcObject = stream; // Re-assign srcObject to ensure continuous display
+                    video.play();
+                }
+
+                capturedFile = null; // Clear the captured file
+                predictCameraBtn.disabled = true; // Disable predict button again
+
+                updateDebugInfo('Photo/video retaken - ready for new capture.');
+            });
+
+            // Prediction Functions
+            predictUploadBtn.addEventListener('click', () => {
+                if (capturedFile) {
+                    predictQuality(capturedFile, 'upload');
+                } else {
+                    alert('Please select a file first.');
+                    updateDebugInfo('Prediction aborted: No file selected for upload.');
+                }
+            });
+
+            predictCameraBtn.addEventListener('click', () => {
+                if (capturedFile) {
+                    predictQuality(capturedFile, 'camera');
+                } else {
+                    alert('Please capture an image or record a video first.');
+                    updateDebugInfo('Prediction aborted: No image or video captured from camera.');
+                }
+            });
+
+            // Main prediction function - Handles sending data to backend
+            async function predictQuality(file, source) {
+                updateDebugInfo(`Starting prediction for file: ${file.name} from source: ${source}`);
+
+                // Show results tab and loader
+                resultsTab.disabled = false;
+                const resultsTabElement = new bootstrap.Tab(resultsTab);
+                resultsTabElement.show();
+
+                resultsLoader.style.display = 'block';
+                resultsContent.classList.add('d-none'); // Hide content initially
+
+                // Reset previous results display elements
+                frameAnalysisData = [];
+                // Destroy existing chart if it exists
+                if (pieChart) {
+                    pieChart.destroy();
+                    pieChart = null;
+                }
+                framesContainer.innerHTML = ''; // Clear frame analysis list
+                noFramesMessage.style.display = 'none'; // Hide no frames message by default
+                document.getElementById('frames-tab').style.display = 'none'; // Hide frame tab by default
+
+                try {
+                    let response;
+                    if (source === 'camera' && file.type.startsWith('image/')) {
+                        // For camera captured image, convert to base64 and send as JSON
+                        updateDebugInfo('Converting captured image to Base64 for backend submission...');
+                        const reader = new FileReader();
+                        // This returns a Promise to wait for FileReader to complete
+                        const imageData = await new Promise((resolve, reject) => {
+                            reader.onload = (e) => resolve(e.target.result);
+                            reader.onerror = (error) => {
+                                updateDebugInfo(`FileReader error: ${error}`);
+                                reject(new Error('Failed to read image file.'));
+                            };
+                            reader.readAsDataURL(file);
+                        });
+
+                        updateDebugInfo('Sending captured image as JSON payload to /predict.');
+                        response = await fetch('/predict', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ image_data: imageData })
+                        });
+                    } else {
+                        // For uploaded files (image or video) and recorded videos
+                        updateDebugInfo(`Preparing FormData for file type: ${file.type}`);
+                        const formData = new FormData();
+                        if (file.type.startsWith('video/')) {
+                            formData.append('video', file, file.name); // Key 'video' for video files
+                            // Show client-side progress visual for video upload
+                            extractionProgress.classList.remove('d-none');
+                            extractionBar.style.width = '0%';
+                            extractionBar.textContent = '0%';
+                            // A very basic simulated progress, as actual processing is on backend
+                            let progressInterval = setInterval(() => {
+                                let currentWidth = parseInt(extractionBar.style.width);
+                                if (currentWidth < 90) { // Simulate up to 90% before response
+                                    extractionBar.style.width = (currentWidth + 5) + '%';
+                                    extractionBar.textContent = (currentWidth + 5) + '%';
+                                }
+                            }, 500);
+
+                            response = await fetch('/predict', {
+                                method: 'POST',
+                                body: formData,
+                            });
+                            clearInterval(progressInterval); // Clear interval once response is received
+                            extractionBar.style.width = '100%';
+                            extractionBar.textContent = '100%';
+                        } else {
+                            formData.append('image', file, file.name); // Key 'image' for image files
+                            response = await fetch('/predict', {
+                                method: 'POST',
+                                body: formData,
+                            });
+                        }
+                    }
+
+                    if (!response.ok) {
+                        // Attempt to parse error message from backend
+                        const errorData = await response.json().catch(() => ({ error: 'Unknown server error.' }));
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.error}`);
+                    }
+
+                    const result = await response.json();
+                    updateDebugInfo('Prediction response received from backend.');
+
+                    // Hide extraction progress if it was shown
+                    extractionProgress.classList.add('d-none');
+
+                    // Handle success response
+                    if (result.success) {
+                        if (result.file_type === 'video' && result.frame_predictions) {
+                            // Store frame analysis data from backend response
+                            frameAnalysisData = result.frame_predictions.map(frame => ({
+                                frameIndex: frame.frame_number - 1, // Adjust to 0-indexed for consistency if needed
+                                time: frame.timestamp.toFixed(2),
+                                prediction: frame.prediction,
+                                confidence: frame.confidence,
+                                dataUrl: frame.thumbnail // Use thumbnail from backend
+                            }));
+                            displayResults(result, true); // True because it's a video result
+                        } else {
+                            displayResults(result, false); // False because it's a single image result
+                        }
+                    } else {
+                        // Display the specific error message from the backend if success is false
+                        alert(`Prediction failed: ${result.error || 'Unknown error occurred.'}`);
+                        updateDebugInfo(`Prediction failed: ${result.error || 'Unknown error occurred.'}`); // Corrected: removed extra braces
+                        resultsLoader.style.display = 'none'; // Hide loader on error
+                        resultsContent.classList.add('d-none'); // Ensure content is hidden
+                    }
+
+                } catch (error) {
+                    updateDebugInfo(`Error during prediction: ${error.message}`);
+                    console.error('Prediction error:', error);
+                    alert(`An error occurred during prediction: ${error.message}. Please try again.`);
+
+                    // Ensure loader is hidden and content is hidden on error
+                    resultsLoader.style.display = 'none';
+                    resultsContent.classList.add('d-none');
+                    extractionProgress.classList.add('d-none'); // Hide progress bar on error
+                }
+            }
+
+
+            // Display results based on the backend's structured response
+            function displayResults(result, isVideo) {
+                updateDebugInfo(`Displaying results: Overall Quality - ${result.overall_quality} (${(result.confidence * 100).toFixed(1)}%)`);
+
+                // Hide loader and show content
+                resultsLoader.style.display = 'none';
+                resultsContent.classList.remove('d-none');
+
+                // Update quality badge and text
+                const badgeClass = result.overall_quality === 'Fresh' ? 'bg-success' :
+                    result.overall_quality === 'Mid' ? 'bg-warning' : 'bg-danger';
+
+                qualityBadge.className = `quality-badge ${badgeClass} text-white`;
+                qualityBadge.textContent = result.overall_quality;
+
+                predictionText.textContent = `Quality: ${result.overall_quality}`;
+                confidenceText.textContent = `Confidence: ${(result.confidence * 100).toFixed(1)}%`;
+
+                // Update summary section common to both image and video
+                framesCount.textContent = result.frames_analyzed || 1; // Default to 1 for single image
+
+                // Now directly use result.quality_percentages as app.py ensures it's always present
+                const freshPercent = result.quality_percentages.Fresh || 0;
+                const midPercent = result.quality_percentages.Mid || 0;
+                const rottenPercent = result.quality_percentages.Rotten || 0;
+
+                freshBar.style.width = freshPercent + '%';
+                freshBar.textContent = `Fresh: ${Math.round(freshPercent)}%`;
+
+                midBar.style.width = midPercent + '%';
+                midBar.textContent = `Mid: ${Math.round(midPercent)}%`;
+
+                rottenBar.style.width = rottenPercent + '%';
+                rottenBar.textContent = `Rotten: ${Math.round(rottenPercent)}%`;
+
+                // Create pie chart using quality_counts (app.py now always provides this)
+                createPieChart(result.quality_counts);
+
+                if (isVideo && result.frame_predictions && result.frame_predictions.length > 0) {
+                    // Show frame analysis tab and display frames
+                    document.getElementById('frames-tab').style.display = 'block';
+                    noFramesMessage.style.display = 'none';
+                    displayFrameAnalysis(result.frame_predictions);
+                } else {
+                    // Hide frame analysis for single images or videos with no frames
+                    document.getElementById('frames-tab').style.display = 'none';
+                    noFramesMessage.style.display = 'block';
+                }
+
+                // Activate the summary tab by default when results are displayed
+                const summaryTabElement = new bootstrap.Tab(document.getElementById('summary-tab'));
+                summaryTabElement.show();
+            }
+
+            // Create pie chart
+            function createPieChart(counts) {
+                const ctx = document.getElementById('summary-pie-chart').getContext('2d');
+
+                // Destroy existing chart if it exists
+                if (pieChart) {
+                    pieChart.destroy();
+                }
+
+                pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Fresh', 'Mid', 'Rotten'],
+                        datasets: [{
+                            data: [counts.Fresh || 0, counts.Mid || 0, counts.Rotten || 0], // Ensure data exists
+                            backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false // We use custom legend HTML
+                            },
+                            tooltip: { // Show percentages in tooltip
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' (' + (context.parsed / context.dataset.data.reduce((a,b)=>a+b,0) * 100).toFixed(1) + '%)';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                updateDebugInfo('Pie chart created/updated.');
+            }
+
+            // Display frame analysis from backend provided data
+            function displayFrameAnalysis(frames) {
+                framesContainer.innerHTML = ''; // Clear previous frames
+                if (!frames || frames.length === 0) {
+                    noFramesMessage.style.display = 'block';
+                    return;
+                }
+                noFramesMessage.style.display = 'none';
+
+                frames.forEach((frame) => {
+                    const frameItem = document.createElement('div');
+                    frameItem.className = 'frame-item';
+
+                    const badgeClass = frame.prediction === 'Fresh' ? 'bg-success' :
+                        frame.prediction === 'Mid' ? 'bg-warning' : 'bg-danger';
+
+                    frameItem.innerHTML = `
+                        <img src="${frame.thumbnail}" class="frame-thumbnail" alt="Frame ${frame.frame_number}">
+                        <div class="frame-info">
+                            <strong>Frame ${frame.frame_number}</strong>
+                            <small class="text-muted d-block">Time: ${frame.timestamp.toFixed(2)}s</small>
+                            <span class="badge ${badgeClass} frame-badge">${frame.prediction} (${(frame.confidence * 100).toFixed(1)}%)</span>
+                        </div>
+                    `;
+
+                    // Add click handler to show frame in modal
+                    frameItem.addEventListener('click', () => {
+                        showFrameModal(frame);
+                    });
+
+                    framesContainer.appendChild(frameItem);
+                });
+                updateDebugInfo(`Displayed ${frames.length} frame analysis items.`);
+            }
+
+            // Show frame in modal
+            function showFrameModal(frame) {
+                const modal = document.getElementById('frameModal');
+                const modalImage = document.getElementById('modal-frame-image');
+                const modalInfo = document.getElementById('modal-frame-info');
+                const modalPrediction = document.getElementById('modal-frame-prediction');
+
+                modalImage.src = frame.thumbnail; // Use thumbnail from backend
+                modalInfo.textContent = `Frame ${frame.frame_number} - Time: ${frame.timestamp.toFixed(2)}s`;
+
+                const badgeClass = frame.prediction === 'Fresh' ? 'bg-success' :
+                    frame.prediction === 'Mid' ? 'bg-warning' : 'bg-danger';
+
+                modalPrediction.className = `badge ${badgeClass}`;
+                modalPrediction.textContent = `${frame.prediction} (${(frame.confidence * 100).toFixed(1)}%)`;
+
+                const frameModal = new bootstrap.Modal(modal);
+                frameModal.show();
+                updateDebugInfo(`Showing modal for Frame ${frame.frame_number}.`);
+            }
+
+            // Analyze another button
+            analyzeAnother.addEventListener('click', () => {
+                updateDebugInfo('Analyze Another Guava button clicked. Resetting application state.');
+
+                // Reset Upload section
+                fileUpload.value = ''; // Clear file input
+                uploadIcon.classList.remove('d-none');
+                filePreview.classList.add('d-none');
+                imagePreview.classList.add('d-none');
+                videoPreview.classList.add('d-none');
+                videoPreview.pause();
+                videoPreview.removeAttribute('src');
+                predictUploadBtn.disabled = true;
+                fileName.textContent = '';
+
+
+                // Reset Camera section
+                cameraPreview.classList.add('d-none');
+                capturedImage.classList.add('d-none');
+                recordedVideo.classList.add('d-none');
+                capturedImage.removeAttribute('src');
+                recordedVideo.removeAttribute('src');
+                recordedVideo.pause();
+
+                // Stop camera stream if running
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    stream = null;
+                    video.srcObject = null;
+                }
+
+                startCameraBtn.disabled = false;
+                takePhotoBtn.disabled = true;
+                startRecordingBtn.disabled = true;
+                stopRecordingBtn.classList.add('d-none'); // Hide stop button
+                startRecordingBtn.classList.remove('d-none'); // Show start recording
+                predictCameraBtn.disabled = true;
+
+
+                // Reset captured file data
+                capturedFile = null;
+                recordedChunks = [];
+
+                // Reset Results section (mostly handled by predictQuality, but ensure initial state)
+                resultsLoader.style.display = 'none';
+                resultsContent.classList.add('d-none');
+                extractionProgress.classList.add('d-none');
+
+                // Destroy pie chart if it exists
+                if (pieChart) {
+                    pieChart.destroy();
+                    pieChart = null;
+                }
+                framesContainer.innerHTML = '';
+                noFramesMessage.style.display = 'none';
+                document.getElementById('frames-tab').style.display = 'none';
+
+
+                // Go back to upload tab
+                const uploadTabElement = new bootstrap.Tab(document.getElementById('upload-tab'));
+                uploadTabElement.show();
+
+                // Disable results tab until a new prediction is made
+                resultsTab.disabled = true;
+
+                updateDebugInfo('Application reset complete. Ready for new analysis.');
+            });
+
+            // Clean up camera stream when page unloads
+            window.addEventListener('beforeunload', () => {
+                if (stream) {
+                    updateDebugInfo('Stopping camera stream on page unload.');
+                    stream.getTracks().forEach(track => track.stop());
+                }
+            });
+
+            updateDebugInfo('All event listeners initialized successfully.');
+        });
+    </script>
+
+</body>
+
+</html>

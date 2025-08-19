@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Video Frame Based Guava Quality Classification</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+
+        .header-text {
+            color: #2E7D32;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            font-weight: 600;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .team-member {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .team-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid #4CAF50;
+            background: linear-gradient(135deg, #4CAF50, #81C784);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        footer {
+            background-color: #2E7D32;
+            color: white;
+            padding: 20px 0;
+            margin-top: 3rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #2E7D32;
+            margin-bottom: 1rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #E8F5E8, #C8E6C9);
+            border: none;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .model-list {
+            columns: 2;
+            column-gap: 2rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-left: 4px solid #FF9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .innovation-badge {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* Table specific CSS */
+        .table-enhanced {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .table-enhanced thead th {
+            background-color: #4CAF50; /* Green header */
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #2E7D32;
+        }
+
+        .table-enhanced tbody tr:nth-child(odd) {
+            background-color: #f2f2f2; /* Light gray for odd rows */
+        }
+
+        .table-enhanced tbody tr:nth-child(even) {
+            background-color: #ffffff; /* White for even rows */
+        }
+
+        .table-enhanced tbody td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table-enhanced tbody tr:hover {
+            background-color: #e0e0e0; /* Slightly darker gray on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-video me-2"></i>
+                Guava Quality Classification
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="header-text">Video Frame Based Guava Quality Classification</h1>
+                <p class="lead">Utilizing Deep Networks for Comprehensive 360° Quality Assessment</p>
+                <div class="innovation-badge">
+                    <i class="fas fa-trophy me-2"></i>97.33% Accuracy Achieved
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-flask me-2"></i>Research Design</h3>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">Our research design outlines the systematic approach taken to develop and evaluate the video frame-based guava quality classification system. It encompasses data collection, preprocessing, model development, and rigorous evaluation phases.</p>
+                <div class="text-center mb-4">
+                    <img src="https://s3.eu-north-1.amazonaws.com/static.ravikkk.143/Research_Design.PNG"
+                        alt="Research Design Diagram" class="img-fluid rounded shadow"
+                        style="max-width: 100%; height: auto;">
+                    <p class="text-muted mt-2"><small>Figure 3: Research Design Flowchart</small></p>
+                </div>
+                <p>The illustration above shows the fundamental research design and methodology undertook for the classification of guava quality into three classes namely; <strong>Fresh</strong>, <strong>Mid</strong> and <strong>Rotten</strong>. It begins with a video recording which involves a mobile device or a camera (<strong>Step 1</strong>). </p>
+                <p>In <strong>Step 2</strong>, frames are captured from the supplied video, and further processes such as rotation, flipping, zooming, and brightness adjustments are implemented to improve the overall dataset’s augmentation, diversity, and robustness. </p>
+                <p>Actual and augmented data is saved in <strong>Step 3</strong> and then split in Training Set (70%) and Validation Set (30%) in <strong>Step 4</strong>. This split assists in enhancing the model generalization as well as averting overfitting. </p>
+                <p>In the last step, images are processed by Convolutional Neural Networks (CNNs) where features are extracted in convolution and pooling layers. Other than that, the model was able to classify the guava as ‘Fresh’, ‘Mid’ or ‘Rotten’ based on predetermined features.</p>
+                <div class="highlight-box">
+                    <strong>🔬 Methodological Rigor:</strong> The design emphasizes a structured, iterative process, ensuring robust model performance and reliable classification results.
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-medal me-2"></i>Research Achievements</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-number">97.33%</div>
+                            <div>Best Ensemble Accuracy</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-number">9</div>
+                            <div>Deep Learning Models</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-number">360°</div>
+                            <div>Video Analysis</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-number">3000</div>
+                            <div>Augmented Frames</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Revolutionary Approach</h3>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center mb-3 mb-md-0">
+                        <img src="https://img.freepik.com/premium-photo/guava-fruit-isolated_55883-2488.jpg?w=2000"
+                            alt="Guava Fruit" class="img-fluid rounded" style="max-width: 250px; width: 100%;">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="highlight-box">
+                            <strong>🎯 Key Innovation:</strong> First comprehensive study using 360° video frames for
+                            guava quality assessment, addressing the critical limitation of single-view image
+                            classification.
+                        </div>
+                        <p>Traditional methods rely on manual sorting or single-view images, missing hidden defects. Our
+                            research introduces a <strong>video-based approach</strong> that captures guava fruits from
+                            all angles, ensuring comprehensive quality evaluation.</p>
+                        <p>The system classifies guavas into three quality categories: <strong>Fresh</strong>,
+                            <strong>Mid-quality</strong>, and <strong>Rotten</strong> using advanced ensemble learning
+                            techniques that combine multiple deep learning models.
+                        </p>
+                        <div class="highlight-box">
+                            <strong>📊 Research Impact:</strong> Published methodology demonstrates superior accuracy
+                            compared to traditional single-image classification approaches, with ensemble models
+                            achieving 97.33% validation accuracy.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-sitemap me-2"></i>System Architecture</h3>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">Our comprehensive system architecture demonstrates the complete pipeline from video
+                    input to quality classification output. The architecture integrates multiple deep learning models in
+                    an ensemble approach to achieve superior accuracy.</p>
+                <div class="text-center mb-4">
+                    <img src="https://s3.eu-north-1.amazonaws.com/static.ravikkk.143/System_architect.png"
+                        alt="System Architecture Diagram" class="img-fluid rounded shadow"
+                        style="max-width: 100%; height: auto;">
+                    <p class="text-muted mt-2"><small>Figure 1: Complete System Architecture showing the integration of
+                            multiple CNN models</small></p>
+                </div>
+                <div class="highlight-box">
+                    <strong>🏗️ Architecture Highlights:</strong> The system employs a modular design with separate
+                    components for video processing, frame extraction, feature extraction through multiple CNN
+                    architectures, and ensemble decision making for final classification.
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-project-diagram me-2"></i>System Workflow</h3>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">The workflow illustrates the step-by-step process from raw video input to final quality
+                    classification, showcasing how each component contributes to the overall system performance.</p>
+                <div class="text-center mb-4">
+                    <img src="https://s3.eu-north-1.amazonaws.com/bucket.ravikkk.143/flowchart.png"
+                        alt="System Workflow Diagram" class="img-fluid rounded shadow"
+                        style="max-width: 100%; height: auto;">
+                    <p class="text-muted mt-2"><small>Figure 2: Detailed workflow showing the complete process from
+                            video capture to quality prediction</small></p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-play-circle me-2"></i>Processing Pipeline</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Video Input & Preprocessing</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Frame Extraction (10 frames per
+                                video)</li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Data Augmentation & Normalization
+                            </li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Multi-model Feature Extraction</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-cogs me-2"></i>Decision Making</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-arrow-right text-success me-2"></i>Individual Model Predictions</li>
+                            <li><i class="fas fa-arrow-right text-success me-2"></i>Ensemble Voting (Soft/Hard)</li>
+                            <li><i class="fas fa-arrow-right text-success me-2"></i>Final Quality Classification</li>
+                            <li><i class="fas fa-arrow-right text-success me-2"></i>Confidence Score Output</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-cogs me-2"></i>Advanced Technical Implementation</h3>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-4">
+                    <div class="col-md-3 mb-4 mb-md-0">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h4>360° Video Capture</h4>
+                        <p>Records guava from all angles at 30 FPS in 1080P resolution, ensuring comprehensive visual
+                            assessment.</p>
+                    </div>
+                    <div class="col-md-3 mb-4 mb-md-0">
+                        <div class="feature-icon">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h4>Frame Extraction</h4>
+                        <p>Extracts 5 evenly spaced frames per video, creating structured dataset with data augmentation
+                            techniques.</p>
+                    </div>
+                    <div class="col-md-3 mb-4 mb-md-0">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4>Ensemble Learning</h4>
+                        <p>Combines multiple models using soft voting, hard voting, and feature fusion strategies.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>High Accuracy</h4>
+                        <p>Achieves 97.33% accuracy with NER ensemble model, outperforming individual architectures.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-network-wired me-2"></i>Deep Learning Models Tested</h5>
+                        <div class="model-list">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check-circle text-success me-2"></i>VGG16 (96.78%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>MobileNetV2 (96.66%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>ResNet50 (96.67%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>ResNet101 (96.67%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>DenseNet201 (96.44%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>InceptionV3 (95.56%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>EfficientNetB0 (96.77%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>NASNetMobile (95.78%)</li>
+                                <li><i class="fas fa-check-circle text-success me-2"></i>Xception (96.44%)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-layer-group me-2"></i>Ensemble Strategies</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-star text-warning me-2"></i><strong>NER Soft Voting:</strong> 97.33%
+                                accuracy</li>
+                            <li><i class="fas fa-star text-warning me-2"></i><strong>NER Hard Voting:</strong> 97.22%
+                                accuracy</li>
+                            <li><i class="fas fa-star text-warning me-2"></i><strong>Feature Fusion:</strong> 96.44%
+                                accuracy</li>
+                        </ul>
+                        <div class="mt-3">
+                            <small class="text-muted">NER = NASNetMobile + EfficientNetB0 + ResNet50</small>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-4"><i class="fas fa-table me-2"></i>Model Performance Metrics</h5>
+                <table class="table-enhanced">
+                    <thead>
+                        <tr>
+                            <th>Model Name</th>
+                            <th>Fresh Precision</th>
+                            <th>Fresh Recall</th>
+                            <th>Fresh F1-Score</th>
+                            <th>Mid Precision</th>
+                            <th>Mid Recall</th>
+                            <th>Mid F1-Score</th>
+                            <th>Rotten Precision</th>
+                            <th>Rotten Recall</th>
+                            <th>Rotten F1-Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>VGG16</td>
+                            <td>0.97</td>
+                            <td>0.95</td>
+                            <td>0.96</td>
+                            <td>0.95</td>
+                            <td>0.98</td>
+                            <td>0.96</td>
+                            <td>1.00</td>
+                            <td>0.98</td>
+                            <td>0.99</td>
+                        </tr>
+                        <tr>
+                            <td>MobileNet</td>
+                            <td>0.95</td>
+                            <td>0.97</td>
+                            <td>0.96</td>
+                            <td>0.97</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.99</td>
+                            <td>0.98</td>
+                            <td>0.99</td>
+                        </tr>
+                        <tr>
+                            <td>DenseNet201</td>
+                            <td>0.93</td>
+                            <td>0.98</td>
+                            <td>0.95</td>
+                            <td>0.98</td>
+                            <td>0.94</td>
+                            <td>0.96</td>
+                            <td>1.00</td>
+                            <td>1.00</td>
+                            <td>1.00</td>
+                        </tr>
+                        <tr>
+                            <td>Inception v3</td>
+                            <td>0.97</td>
+                            <td>0.94</td>
+                            <td>0.95</td>
+                            <td>0.93</td>
+                            <td>0.97</td>
+                            <td>0.95</td>
+                            <td>0.98</td>
+                            <td>0.96</td>
+                            <td>0.97</td>
+                        </tr>
+                        <tr>
+                            <td>EfficientNetB0</td>
+                            <td>0.83</td>
+                            <td>1.00</td>
+                            <td>0.91</td>
+                            <td>1.00</td>
+                            <td>0.83</td>
+                            <td>0.90</td>
+                            <td>0.99</td>
+                            <td>1.00</td>
+                            <td>1.00</td>
+                        </tr>
+                        <tr>
+                            <td>NASANet Mobile</td>
+                            <td>0.97</td>
+                            <td>0.94</td>
+                            <td>0.96</td>
+                            <td>0.94</td>
+                            <td>0.96</td>
+                            <td>0.95</td>
+                            <td>0.98</td>
+                            <td>0.97</td>
+                            <td>0.97</td>
+                        </tr>
+                        <tr>
+                            <td>ResNet50</td>
+                            <td>0.94</td>
+                            <td>0.98</td>
+                            <td>0.96</td>
+                            <td>0.98</td>
+                            <td>0.94</td>
+                            <td>0.96</td>
+                            <td>0.98</td>
+                            <td>0.99</td>
+                            <td>0.99</td>
+                        </tr>
+                        <tr>
+                            <td>ResNet101</td>
+                            <td>0.98</td>
+                            <td>0.94</td>
+                            <td>0.96</td>
+                            <td>0.94</td>
+                            <td>0.98</td>
+                            <td>0.96</td>
+                            <td>0.99</td>
+                            <td>0.98</td>
+                            <td>0.99</td>
+                        </tr>
+                        <tr>
+                            <td>Xception</td>
+                            <td>0.95</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.99</td>
+                            <td>0.98</td>
+                            <td>0.99</td>
+                        </tr>
+                        <tr>
+                            <td>NER (Soft Voting)</td>
+                            <td>0.97</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.97</td>
+                            <td>0.97</td>
+                            <td>0.97</td>
+                            <td>1.00</td>
+                            <td>1.00</td>
+                            <td>1.00</td>
+                        </tr>
+                        <tr>
+                            <td>NER (Hard Voting)</td>
+                            <td>0.97</td>
+                            <td>0.96</td>
+                            <td>0.96</td>
+                            <td>0.97</td>
+                            <td>0.97</td>
+                            <td>0.97</td>
+                            <td>1.00</td>
+                            <td>0.99</td>
+                            <td>1.00</td>
+                        </tr>
+                        <tr>
+                            <td>NER (Feature Fusion)</td>
+                            <td>1.00</td>
+                            <td>0.91</td>
+                            <td>0.95</td>
+                            <td>0.93</td>
+                            <td>0.99</td>
+                            <td>0.96</td>
+                            <td>0.97</td>
+                            <td>0.99</td>
+                            <td>0.98</td>
+                        </tr>
+                        <tr>
+                            <td>VRM (Feature Fusion)</td>
+                            <td>0.99</td>
+                            <td>0.92</td>
+                            <td>0.95</td>
+                            <td>0.93</td>
+                            <td>0.99</td>
+                            <td>0.96</td>
+                            <td>0.99</td>
+                            <td>0.99</td>
+                            <td>0.99</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-users me-2"></i>Research Team</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="team-member">
+                            <div class="team-img">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h5>Sakshi Gheeyal</h5>
+                            <p class="text-muted">Master of Computer Applications<br>SRM University, Delhi-NCR</p>
+                            <p><i class="fas fa-envelope me-2"></i>sakshighial29@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="team-member">
+                            <div class="team-img">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h5>Ravi Kumar Raushan</h5>
+                            <p class="text-muted">Master of Computer Applications<br>SRM University, Delhi-NCR</p>
+                            <p><i class="fas fa-envelope me-2"></i>ravikumarraushan0703@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="team-member">
+                            <div class="team-img">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h5>Atif Mahmood</h5>
+                            <p class="text-muted">Assistant Professor<br>SRM University, Delhi-NCR</p>
+                            <p><i class="fas fa-envelope me-2"></i>atifmahmood1@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-code me-2"></i>Technology Stack & Future Scope</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Technical Implementation</h5>
+                        <ul>
+                            <li><strong>Deep Learning:</strong> TensorFlow & Keras</li>
+                            <li><strong>Computer Vision:</strong> OpenCV for video processing</li>
+                            <li><strong>Web Framework:</strong> Flask for real-time deployment</li>
+                            <li><strong>Data Processing:</strong> ImageDataGenerator for augmentation</li>
+                            <li><strong>Hardware:</strong> Optimized for both CPU and T4 GPU environments</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Research Contributions</h5>
+                        <ul>
+                            <li>First 360° video-based guava quality classification system</li>
+                            <li>Comprehensive evaluation of 9 state-of-the-art CNN architectures</li>
+                            <li>Novel ensemble learning approach achieving 97.33% accuracy</li>
+                            <li>Real-world dataset from Delhi fruit markets</li>
+                            <li>Scalable methodology applicable to other fruit varieties</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight-box mt-4">
+                    <h5><i class="fas fa-rocket me-2"></i>Future Research Directions</h5>
+                    <p class="mb-2">Our research opens several avenues for future development:</p>
+                    <ul class="mb-0">
+                        <li>Multimodal data integration for internal defect detection</li>
+                        <li>Extension to other tropical fruit varieties</li>
+                        <li>Real-time industrial deployment for automated sorting systems</li>
+                        <li>Enhanced dataset with different guava varieties and growing conditions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Video Frame Based Guava Quality Classification Research Project. SRM University,
+                Delhi-NCR.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

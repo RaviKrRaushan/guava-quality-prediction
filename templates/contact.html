@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Guava Quality Predictor</title>
+    <!-- Updated CDN links with specific versions that are known to work -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+
+        .header-text {
+            color: #2E7D32;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            font-weight: 600;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .btn-primary {
+            background-color: #2E7D32;
+            border-color: #2E7D32;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #1B5E20;
+            border-color: #1B5E20;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background-color: #2E7D32;
+            color: white;
+            padding: 20px 0;
+            margin-top: 3rem;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: #2E7D32;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info {
+            margin-bottom: 2rem;
+        }
+
+        .map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        /* Animation for feedback message */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -20px, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .feedback-message {
+            animation: fadeInDown 0.5s ease;
+        }
+
+        .map-fallback {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .location-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-seedling me-2"></i>
+                Guava Quality Predictor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="header-text">Contact Us</h1>
+                <p class="lead">Have questions about the Guava Quality Predictor? We're here to help!</p>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} feedback-message alert-dismissible fade show" role="alert">
+            <i
+                class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h3 class="mb-0">Send Us a Message</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="contactForm" method="POST" action="/submit-contact">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    placeholder="Enter your name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter your email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" name="subject"
+                                    placeholder="Enter subject">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea class="form-control" id="message" name="message" rows="5"
+                                    placeholder="Enter your message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">Contact Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 contact-info">
+                                <div class="contact-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <h5>Name & Role</h5>
+                                <p>Sakshi Ghiyal</p>
+                                <p><small><i>ML model training, documentation, and research paper</i></small></p>
+                                <p>Ravi Kumar Raushan</p>
+                                <p><small><i>Dataset building, Flask web app development, model integration</i></small>
+                                </p>
+                            </div>
+                            <div class="col-md-6 contact-info">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <h5>Phone</h5>
+                                <p>+919812340357</p>
+                                <p>+919693493746</p>
+                            </div>
+                            <div class="col-md-6 contact-info">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h5>Email</h5>
+                                <p>sakshighial29@gmail.com</p>
+                                <p>ravikumarraushan0703@gmail.com</p>
+                            </div>
+                            <div class="col-md-6 contact-info">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <h5>Address</h5>
+                                <p>SRM University<br>Sonepat, Delhi-NCR<br>Haryana - 131029, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Find Us</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="map-container">
+                    <!-- Google Maps Embed for S.R.M University -->
+                    <iframe 
+                        class="map-iframe"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3497.1234567890123!2d77.12520738515858!3d28.919723282362977!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390dae878d2dcaf1%3A0xdd00179e64a0846f!2sS.R.M%20University!5e0!3m2!1sen!2sin!4v1640000000000!5m2!1sen!2sin"
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="S.R.M University Location">
+                    </iframe>
+                </div>
+                <div class="location-details">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-map-marker-alt me-2"></i>Location Details</h6>
+                            <p class="mb-1"><strong>Institution:</strong> S.R.M University</p>
+                            <p class="mb-1"><strong>Campus:</strong> Delhi NCR Campus</p>
+                            <p class="mb-1"><strong>City:</strong> Sonepat</p>
+                            <p class="mb-1"><strong>State:</strong> Haryana</p>
+                            <p class="mb-0"><strong>PIN Code:</strong> 131029</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-route me-2"></i>Getting Here</h6>
+                            <p class="mb-1">🚌 <strong>Bus:</strong> Regular buses from Delhi to Sonepat</p>
+                            <p class="mb-1">🚗 <strong>By Car:</strong> NH44 via GT Karnal Road</p>
+                            <p class="mb-1">🚆 <strong>Train:</strong> Sonepat Railway Station (nearby)</p>
+                            <p class="mb-0">📍 <strong>Coordinates:</strong> 28.9197, 77.1252</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="mb-0">Frequently Asked Questions</h3>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How accurate is the quality prediction?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Our AI model has been trained on thousands of guava samples and achieves over 90% accuracy
+                                in laboratory testing. For best results, ensure good lighting when capturing video and try
+                                to show multiple angles of the fruit.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+                                Can I use this tool for other fruits?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Currently, our system is specifically trained for guava fruits. We're working on expanding
+                                to other fruits in the future. Stay tuned for updates!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+                                Is there a mobile app available?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We're currently developing a mobile application for both iOS and Android. Our web
+                                application is mobile-responsive and can be used from your phone's browser in the meantime.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq4">
+                                How can businesses integrate this technology?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We offer API solutions and custom integration for businesses in the agricultural and retail
+                                sectors. Please contact our business development team at business@guavapredictor.com for
+                                more information.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Guava Quality Predictor. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts - Using defer attribute to ensure DOM is loaded before executing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            // Form validation
+            var contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (e) {
+                    var name = document.getElementById('name').value;
+                    var email = document.getElementById('email').value;
+                    var message = document.getElementById('message').value;
+
+                    if (!name || !email || !message) {
+                        e.preventDefault();
+                        alert('Please fill in all required fields');
+                    }
+                });
+            }
+
+            // Auto-hide flash messages after 5 seconds
+            setTimeout(function () {
+                var alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function (alert) {
+                    var bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+
+            // Test if Bootstrap JS is loaded
+            var bootstrapLoaded = typeof bootstrap !== 'undefined';
+            if (!bootstrapLoaded) {
+                console.error('Bootstrap JS failed to load');
+            }
+
+            // Map error handling with updated fallback for S.R.M University
+            var mapIframe = document.querySelector('.map-iframe');
+            if (mapIframe) {
+                mapIframe.addEventListener('error', function() {
+                    console.log('Map failed to load, showing fallback');
+                    var mapContainer = document.querySelector('.map-container');
+                    mapContainer.innerHTML = `
+                        <div class="map-fallback">
+                            <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: #2E7D32;"></i>
+                            <h5 class="mt-3">S.R.M University, Sonepat</h5>
+                            <p>Interactive map temporarily unavailable</p>
+                            <a href="https://www.google.com/maps/place/S.R.M+University/@28.9197232,77.1252074,17z" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="fas fa-external-link-alt me-1"></i>Open in Google Maps
+                            </a>
+                        </div>
+                    `;
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
